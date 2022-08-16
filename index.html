@@ -10,27 +10,27 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title">2048</h1>
+    <div class="header">
+      <h1 class="title">2048</h1>
+      <div class="score-cotainer">
+        <span class="score-text">score:</span>
+        <span class="score-value" id="score-value">0</span>
+      </div>
+    </div>
+    <div class="game-over-container" id="game-over">
+      <span>Game over</span>
+      <button class="retry-button" id="retry-button">Try again</button>
+    </div>
     <div class="grid-container" id="grid">
-        <div class="grid_cell" id="cell_0-0">
-          <div class="content">4</div>
-        </div>
-        <div class="grid_cell" id="cell_0-1">
-          <div class="content 0-0">2</div>
-        </div>
-        <div class="grid_cell" id="cell_0-2">
-          <div class="content 0-0">2</div>
-        </div>
+        <div class="grid_cell" id="cell_0-0"></div>
+        <div class="grid_cell" id="cell_0-1"></div>
+        <div class="grid_cell" id="cell_0-2"></div>
         <div class="grid_cell" id="cell_0-3"></div>
-        <div class="grid_cell" id="cell_1-0">
-          <div class="content 0-0">2</div>
-        </div>
+        <div class="grid_cell" id="cell_1-0"></div>
         <div class="grid_cell" id="cell_1-1"></div>
         <div class="grid_cell" id="cell_1-2"></div>
         <div class="grid_cell" id="cell_1-3"></div>
-        <div class="grid_cell" id="cell_2-0">
-          <div class="content 0-0">2</div>
-        </div>
+        <div class="grid_cell" id="cell_2-0"></div>
         <div class="grid_cell" id="cell_2-1"></div>
         <div class="grid_cell" id="cell_2-2"></div>
         <div class="grid_cell" id="cell_2-3"></div>
