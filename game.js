@@ -1,14 +1,16 @@
 
 let gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 let score = 0;
+let bestScore = 0;
 const retryButton = document.querySelector('#retry-button');
+const newGameButton = document.querySelector('#new-game-button');
 
 const render = (renderGridArray) =>{
   const domGridArray = Array.from(document.querySelectorAll('.grid_cell'));
   const scoreText = document.querySelector('#score-value');
-  score = 0;
+  const bestScoreText = document.querySelector('#best-score-value');
+
   for( let i = 0; i < renderGridArray.length; i++){
-    score += renderGridArray[i];
     if(renderGridArray[i] != 0){
       const div = `<div class="content${renderGridArray[i]}">${renderGridArray[i]}</div>`;
       domGridArray[i].innerHTML = div;
@@ -16,6 +18,13 @@ const render = (renderGridArray) =>{
       domGridArray[i].innerHTML = '';
     }
   }
+
+  if(score > bestScore){
+    bestScore = score;
+    localStorage.setItem('bestScore', bestScore);
+    bestScoreText.innerHTML = bestScore;
+  }
+
   scoreText.innerHTML = score;
 };
 
@@ -50,11 +59,23 @@ const random = (randArray) =>{
     }
     if(indexesArray.length === randArray.length ){
       const randIndex = Math.floor(Math.random() * indexesArray.length);
-      randArray[indexesArray[randIndex]] = 2;
+      let randValue = 0;
+      if(Math.floor(Math.random() * 10) === 0){
+        randValue = 4;
+      }else {
+        randValue = 2;
+      }
+      randArray[indexesArray[randIndex]] = randValue;
       indexesArray.splice(randIndex, 1);
     }
+    let randValue = 0;
+    if(Math.floor(Math.random() * 10) === 0){
+      randValue = 4;
+    }else {
+      randValue = 2;
+    }
     const randIndex = Math.floor(Math.random() * indexesArray.length);
-    randArray[indexesArray[randIndex]] = 2;
+    randArray[indexesArray[randIndex]] = randValue;
     return randArray;
   }else {
     if(isGameOver(randArray)){
@@ -92,6 +113,7 @@ const downReс = function rec(i, j, recGridArray){
     recGridArray[index] = 0;
   } else if(recGridArray[index] === recGridArray[index + 4]){
     recGridArray[index + 4] = recGridArray[index] * 2;
+    score += recGridArray[index] * 2;
     recGridArray[index] = 0;
   }
 
@@ -120,6 +142,7 @@ const down = (downGridArray) =>{
         downGridArray[index] = 0;
       } else if(currentGridCell === nextGridCell){
         downGridArray[index + 4] = currentGridCell * 2;
+        score += currentGridCell * 2;
         downGridArray[index] = 0;
       } 
     }
@@ -142,6 +165,7 @@ const rightReс = function rec(i, j, recGridArray){
     recGridArray[index] = 0;
   } else if(recGridArray[index] === recGridArray[index + 1]){
     recGridArray[index + 1] = recGridArray[index] * 2;
+    score += recGridArray[index] * 2;
     recGridArray[index] = 0;
   }
 
@@ -170,6 +194,7 @@ const right = (rightGridArray) =>{
         rightGridArray[index] = 0;
       } else if(currentGridCell === nextGridCell){
         rightGridArray[index + 1] = currentGridCell * 2;
+        score += currentGridCell * 2;
         rightGridArray[index] = 0;
       } 
     }
@@ -192,6 +217,7 @@ const upReс = function rec(i, j, recGridArray){
     recGridArray[index] = 0;
   } else if(recGridArray[index] === recGridArray[index - 4]){
     recGridArray[index - 4] = recGridArray[index] * 2;
+    score += recGridArray[index] * 2;
     recGridArray[index] = 0;
   }
 
@@ -220,6 +246,7 @@ const up = (upGridArray) =>{
         upGridArray[index] = 0;
       } else if(currentGridCell === nextGridCell){
         upGridArray[index - 4] = currentGridCell * 2;
+        score += currentGridCell * 2;
         upGridArray[index] = 0;
       } 
     }
@@ -243,6 +270,7 @@ const leftReс = function rec(i, j, recGridArray){
     recGridArray[index] = 0;
   } else if(recGridArray[index] === recGridArray[index - 1]){
     recGridArray[index - 1] = recGridArray[index] * 2;
+    score += recGridArray[index] * 2;
     recGridArray[index] = 0;
   }
 
@@ -271,6 +299,7 @@ const left = (leftGridArray) =>{
         leftGridArray[index] = 0;
       } else if(currentGridCell === nextGridCell){
         leftGridArray[index - 1] = currentGridCell * 2;
+        score += currentGridCell * 2;
         leftGridArray[index] = 0;
       } 
     }
@@ -306,7 +335,17 @@ document.addEventListener('keyup', (event) =>{
 
  })
 
+ newGameButton.addEventListener('click', () =>{
+  gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  gridArray = random(gridArray);
+  score = 0;
+  render(gridArray);
+ })
+
  document.addEventListener('DOMContentLoaded', () =>{
   gridArray = random(gridArray);
   render(gridArray);
+  const bestScoreText = document.querySelector('#best-score-value');
+  bestScore = localStorage.getItem('bestScore');
+  bestScoreText.innerHTML = bestScore;
  })
