@@ -1,5 +1,5 @@
 
-let gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+let gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0];
 let score = 0;
 let bestScore = 0;
 const retryButton = document.querySelector('#retry-button');
@@ -97,33 +97,39 @@ retryButton.addEventListener('click', () => {
 
 
 
-const downReс = function rec(i, j, recGridArray){
+const downReс = function rec(i, j, recGridArray, skipIndex){
 
   if(j === 3 ) {
     return (recGridArray);
   } else{
     const index = i + (j * 4);
+    
   
   if (recGridArray[index + 4] !== 0 && (recGridArray[index] !== recGridArray[index + 4])) {
-    rec(i, j + 1, recGridArray);
+    rec(i, j + 1, recGridArray, skipIndex);
   } 
 
   if(recGridArray[index + 4] === 0){
+    if(skipIndex.includes(index)){
+      skipIndex.push(index + 4);
+    }
     recGridArray[index + 4] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if(recGridArray[index] === recGridArray[index + 4]){
+  } else if((recGridArray[index] === recGridArray[index + 4]) && !skipIndex.includes(index)){
     recGridArray[index + 4] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
+    skipIndex.push(index + 4);
   }
 
-  rec(i, j + 1, recGridArray);
+  rec(i, j + 1, recGridArray, skipIndex);
   }
   return recGridArray;
 };
 
 const down = (downGridArray) =>{
- 
+  let flag = false;
+  let skipIndex = [];
   for(let i = 0; i < 4; i++ ){
     for(let j = 0; j < 3; j++ ){
       const index = i + j * 4;
@@ -132,50 +138,61 @@ const down = (downGridArray) =>{
       }
 
       if (downGridArray[index + 4] !== 0 && (downGridArray[index] !== downGridArray[index + 4])) {
-        downGridArray = downReс(i, j, downGridArray);
+        downGridArray = downReс(i, j, downGridArray, skipIndex);
       }
       const currentGridCell = downGridArray[index];
       const nextGridCell = downGridArray[index + 4];
       if(nextGridCell === 0){
-
+        if(skipIndex.includes(index)){
+          skipIndex.push(index + 4);
+        }
         downGridArray[index + 4] = currentGridCell;
         downGridArray[index] = 0;
-      } else if(currentGridCell === nextGridCell){
+        flag = true;
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index) && !skipIndex.includes(index + 4)){
         downGridArray[index + 4] = currentGridCell * 2;
         score += currentGridCell * 2;
         downGridArray[index] = 0;
+        skipIndex.push(index + 4);
+        flag = true;
       } 
     }
   }
+  if (flag) random(downGridArray);
   return(downGridArray);
 }
 
-const rightReс = function rec(i, j, recGridArray){
+const rightReс = function rec(i, j, recGridArray, skipIndex){
   if(j === 3) {
     return (recGridArray);
   } else{
     const index = i * 4 + j;
   
   if (recGridArray[index + 1] !== 0 && (recGridArray[index] !== recGridArray[index + 1])) {
-    rec(i, j + 1, recGridArray);
+    rec(i, j + 1, recGridArray, skipIndex);
   } 
 
   if(recGridArray[index + 1] === 0){
+    if(skipIndex.includes(index)){
+      skipIndex.push(index + 1);
+    }
     recGridArray[index + 1] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if(recGridArray[index] === recGridArray[index + 1]){
+  } else if((recGridArray[index] === recGridArray[index + 1]) && !skipIndex.includes(index) && !skipIndex.includes(index + 1)){
     recGridArray[index + 1] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
+    skipIndex.push(index + 1);
   }
 
-  rec(i, j + 1, recGridArray);
+  rec(i, j + 1, recGridArray, skipIndex);
   }
   return recGridArray;
 };
 
 const right = (rightGridArray) =>{
- 
+  let flag = false;
+  let skipIndex = [];
   for(let i = 0; i < 4; i++ ){
     for(let j = 0; j < 3; j++ ){
       const index = i * 4 + j;
@@ -185,49 +202,63 @@ const right = (rightGridArray) =>{
       }
 
       if (rightGridArray[index + 1] !== 0 && (rightGridArray[index] !== rightGridArray[index + 1])) {
-        rightGridArray = rightReс(i, j, rightGridArray);
+        rightGridArray = rightReс(i, j, rightGridArray, skipIndex);
       }
       const currentGridCell = rightGridArray[index];
       const nextGridCell = rightGridArray[index + 1];
       if(nextGridCell === 0){
+        if(skipIndex.includes(index)){
+          skipIndex.push(index + 1);
+          console.log(skipIndex, "====", index);
+        }
+        flag = true;
         rightGridArray[index + 1] = currentGridCell;
         rightGridArray[index] = 0;
-      } else if(currentGridCell === nextGridCell){
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index) && !skipIndex.includes(index + 1)){
         rightGridArray[index + 1] = currentGridCell * 2;
         score += currentGridCell * 2;
         rightGridArray[index] = 0;
+        skipIndex.push(index + 1);
+        console.log(skipIndex);
+        flag = true
       } 
     }
   }
+  if(flag) random(rightGridArray);
   return(rightGridArray);
 }
 
-const upReс = function rec(i, j, recGridArray){
+const upReс = function rec(i, j, recGridArray, skipIndex){
   if(i === 0) {
     return (recGridArray);
   } else{
     const index = i * 4 + j;
   
   if (recGridArray[index - 4] !== 0 && (recGridArray[index] !== recGridArray[index - 4])) {
-    rec(i - 1, j, recGridArray);
+    rec(i - 1, j, recGridArray, skipIndex);
   } 
 
   if(recGridArray[index - 4] === 0){
+    if(skipIndex.includes(index)){
+      skipIndex.push(index - 4);
+    }
     recGridArray[index - 4] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if(recGridArray[index] === recGridArray[index - 4]){
+  } else if((recGridArray[index] === recGridArray[index - 4]) && !skipIndex.includes(index)){
     recGridArray[index - 4] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
+    skipIndex.push(index - 4);
   }
 
-  rec(i - 1, j, recGridArray);
+  rec(i - 1, j, recGridArray, skipIndex);
   }
   return recGridArray;
 };
 
 const up = (upGridArray) =>{
- 
+  let flag = false;
+  let skipIndex = []
   for(let i = 3; i > 0; i-- ){
     for(let j = 0; j < 4; j++ ){
       const index = i * 4 + j;
@@ -237,50 +268,62 @@ const up = (upGridArray) =>{
       }
 
       if (upGridArray[index - 4] !== 0 && (upGridArray[index] !== upGridArray[index - 4])) {
-        upGridArray = upReс(i, j, upGridArray);
+        upGridArray = upReс(i, j, upGridArray, skipIndex);
       }
       const currentGridCell = upGridArray[index];
       const nextGridCell = upGridArray[index - 4];
       if(nextGridCell === 0){
+        if(skipIndex.includes(index)){
+          skipIndex.push(index - 4);
+        }
+        flag = true;
         upGridArray[index - 4] = currentGridCell;
         upGridArray[index] = 0;
-      } else if(currentGridCell === nextGridCell){
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index)){
         upGridArray[index - 4] = currentGridCell * 2;
         score += currentGridCell * 2;
         upGridArray[index] = 0;
+        skipIndex.push(index - 4);
+        flag = true;
       } 
     }
   }
+  if(flag) random(upGridArray);
   return(upGridArray);
 }
 
 
-const leftReс = function rec(i, j, recGridArray){
+const leftReс = function rec(i, j, recGridArray, skipIndex){
   if(j === 0) {
     return (recGridArray);
   } else{
     const index = i * 4 + j;
   
   if (recGridArray[index - 1] !== 0 && (recGridArray[index] !== recGridArray[index - 1])) {
-    rec(i, j - 1, recGridArray);
+    rec(i, j - 1, recGridArray, skipIndex);
   } 
 
   if(recGridArray[index - 1] === 0){
+    if(skipIndex.includes(index)){
+      skipIndex.push(index - 1);
+    }
     recGridArray[index - 1] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if(recGridArray[index] === recGridArray[index - 1]){
+  } else if((recGridArray[index] === recGridArray[index - 1]) && !skipIndex.includes(index)){
     recGridArray[index - 1] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
+    skipIndex.push(index - 1);
   }
 
-  rec(i, j - 1, recGridArray);
+  rec(i, j - 1, recGridArray, skipIndex);
   }
   return recGridArray;
 };
 
 const left = (leftGridArray) =>{
- 
+  let flag = false;
+  let skipIndex = [];
   for(let i = 0; i < 4; i++ ){
     for(let j = 3; j > 0; j-- ){
       const index = i * 4 + j;
@@ -290,20 +333,27 @@ const left = (leftGridArray) =>{
       }
 
       if (leftGridArray[index - 1] !== 0 && (leftGridArray[index] !== leftGridArray[index - 1])) {
-        leftGridArray = leftReс(i, j, leftGridArray);
+        leftGridArray = leftReс(i, j, leftGridArray, skipIndex);
       }
       const currentGridCell = leftGridArray[index];
       const nextGridCell = leftGridArray[index - 1];
       if(nextGridCell === 0){
+        if(skipIndex.includes(index)){
+          skipIndex.push(index - 1);
+        }
         leftGridArray[index - 1] = currentGridCell;
         leftGridArray[index] = 0;
-      } else if(currentGridCell === nextGridCell){
+        flag = true;
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index)){
         leftGridArray[index - 1] = currentGridCell * 2;
         score += currentGridCell * 2;
         leftGridArray[index] = 0;
+        skipIndex.push(index - 1);
+        flag = true;
       } 
     }
   }
+  if(flag) random(leftGridArray);
   return(leftGridArray);
 }
 
@@ -311,25 +361,21 @@ const left = (leftGridArray) =>{
 document.addEventListener('keyup', (event) =>{
   if(event.key == "ArrowDown"){
     gridArray = down(gridArray);
-    gridArray = random(gridArray);
     render(gridArray);
   }
   
   if(event.key == "ArrowRight"){
     gridArray = right(gridArray);
-    gridArray = random(gridArray);
     render(gridArray);
   }
 
   if(event.key == "ArrowUp"){
     gridArray = up(gridArray);
-    gridArray = random(gridArray);
     render(gridArray);
   }
 
   if(event.key == "ArrowLeft"){
     gridArray = left(gridArray);
-    gridArray = random(gridArray);
     render(gridArray);
   }
 
