@@ -1,5 +1,5 @@
 
-let gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+let gridArray = [4, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 4, 2, 0, 2];
 let score = 0;
 let bestScore = 0;
 const retryButton = document.querySelector('#retry-button');
@@ -116,7 +116,7 @@ const downReс = function rec(i, j, recGridArray, skipIndex, flag){
     flag = true;
     recGridArray[index + 4] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if((recGridArray[index] === recGridArray[index + 4]) && !skipIndex.includes(index)){
+  } else if((recGridArray[index] === recGridArray[index + 4]) && !skipIndex.includes(index) && !skipIndex.includes(index + 4)){
     recGridArray[index + 4] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
@@ -257,7 +257,7 @@ const upReс = function rec(i, j, recGridArray, skipIndex, flag){
     flag = true;
     recGridArray[index - 4] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if((recGridArray[index] === recGridArray[index - 4]) && !skipIndex.includes(index)){
+  } else if((recGridArray[index] === recGridArray[index - 4]) && !skipIndex.includes(index) && !skipIndex.includes(index - 4)){
     recGridArray[index - 4] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
@@ -293,7 +293,7 @@ const up = (upGridArray) =>{
         flag = true;
         upGridArray[index - 4] = currentGridCell;
         upGridArray[index] = 0;
-      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index)){
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index) && !skipIndex.includes(index - 4)){
         upGridArray[index - 4] = currentGridCell * 2;
         score += currentGridCell * 2;
         upGridArray[index] = 0;
@@ -329,7 +329,7 @@ const leftReс = function rec(i, j, recGridArray, skipIndex, flag){
     flag = true;
     recGridArray[index - 1] = recGridArray[index];
     recGridArray[index] = 0;
-  } else if((recGridArray[index] === recGridArray[index - 1]) && !skipIndex.includes(index)){
+  } else if((recGridArray[index] === recGridArray[index - 1]) && !skipIndex.includes(index) && !skipIndex.includes(index - 1)){
     recGridArray[index - 1] = recGridArray[index] * 2;
     score += recGridArray[index] * 2;
     recGridArray[index] = 0;
@@ -365,7 +365,7 @@ const left = (leftGridArray) =>{
         leftGridArray[index - 1] = currentGridCell;
         leftGridArray[index] = 0;
         flag = true;
-      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index)){
+      } else if((currentGridCell === nextGridCell) && !skipIndex.includes(index) && !skipIndex.includes(index - 1)){
         leftGridArray[index - 1] = currentGridCell * 2;
         score += currentGridCell * 2;
         leftGridArray[index] = 0;
