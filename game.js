@@ -161,6 +161,11 @@ const down = (downGridArray) =>{
     }
   }
   if (flag) random(downGridArray);
+  if(!flag && !downGridArray.includes(0)){
+    if(isGameOver(downGridArray)){
+      gameOver();
+    }
+  }
   return(downGridArray);
 }
 
@@ -212,8 +217,7 @@ const right = (rightGridArray) =>{
       const nextGridCell = rightGridArray[index + 1];
       if(nextGridCell === 0){
         if(skipIndex.includes(index)){
-          skipIndex.push(index + 1);
-          console.log(skipIndex, "====", index);
+          skipIndex.push(index + 1);  
         }
         flag = true;
         rightGridArray[index + 1] = currentGridCell;
@@ -223,9 +227,13 @@ const right = (rightGridArray) =>{
         score += currentGridCell * 2;
         rightGridArray[index] = 0;
         skipIndex.push(index + 1);
-        console.log(skipIndex);
         flag = true
       } 
+    }
+  }
+  if(!flag && !rightGridArray.includes(0)){
+    if(isGameOver(rightGridArray)){
+      gameOver();
     }
   }
   if(flag) random(rightGridArray);
@@ -295,6 +303,11 @@ const up = (upGridArray) =>{
     }
   }
   if(flag) random(upGridArray);
+  if(!flag && !upGridArray.includes(0)){
+    if(isGameOver(upGridArray)){
+      gameOver();
+    }
+  }
   return(upGridArray);
 }
 
@@ -361,8 +374,12 @@ const left = (leftGridArray) =>{
       } 
     }
   }
-  console.log(flag);
   if(flag) random(leftGridArray);
+  if(!flag && !leftGridArray.includes(0)){
+    if(isGameOver(leftGridArray)){
+      gameOver();
+    }
+  }
   return(leftGridArray);
 }
 
