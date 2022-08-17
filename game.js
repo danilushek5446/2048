@@ -1,5 +1,5 @@
 
-let gridArray = [2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0];
+let gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 let score = 0;
 let bestScore = 0;
 const retryButton = document.querySelector('#retry-button');
