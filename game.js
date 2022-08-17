@@ -409,6 +409,8 @@ document.addEventListener('keyup', (event) =>{
  })
 
  newGameButton.addEventListener('click', () =>{
+  const div = document.querySelector('#game-over');
+  div.style.display = "none";
   gridArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   gridArray = random(gridArray);
   score = 0;
